@@ -6,9 +6,11 @@ Compile:
 
 Visual C++ (Windows):
 (In developer Command Prompt, directory containing main.cpp)
+
 cl main.cpp
 
 GCC (Linux):
 (In directory containing main.cpp)
+
 g++ main.cpp -o main
 ./main
