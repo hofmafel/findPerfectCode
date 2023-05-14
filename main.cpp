@@ -108,7 +108,7 @@ void findCodes(unsigned int seed0,unsigned int seed1)
 {
 	std::vector<unsigned int> elements;
 	elements.emplace_back(seed0);
-	Stage stage(elements, seed1);
+	static Stage stage(elements, seed1);
 }
 std::string c_i(int i)
 {
@@ -192,6 +192,12 @@ int main()
 	std::cout << "\nEnter seed 1:";
 	std::cin >> seed1;
 
+	if(__popcnt(seed0 ^ seed1) < 3)
+	{
+		std::cout << "Hamming distance of seeds too small.\n";
+		return -1;
+	}
+
 	std::thread computer(findCodes, seed0, seed1);
 
 	while(codesFound < NUMBEROFRESULTS)
@@ -201,4 +207,5 @@ int main()
 		latexSave(e);
 
 	computer.join();
+	return 0;
 }
