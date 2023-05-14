@@ -5,17 +5,18 @@
 #include<random>
 #include<thread>
 #include<mutex>
-#include <chrono> 
-#include <fstream>
-#include <intrin.h>
+#include<chrono> 
+#include<fstream>
+#include<intrin.h>
 #include<string>
 
-#define NUMBEROFRESULTS 100
+#define NUMBEROFRESULTS 1
 
 class Stage;
 
 unsigned int codesFound = 0;
 std::vector<std::vector<unsigned int>> results;
+
 
 class Stage
 {
@@ -55,7 +56,7 @@ public:
 
 			for (int i = 0; i < 128; i++)
 			{
-				stages.push_back(new Stage(elements, i));
+				stages.push_back(std::make_unique<Stage>(elements, i));
 			}
 		}
 
@@ -64,11 +65,6 @@ public:
 			elements.clear();
 		}
 
-	}
-	~Stage()
-	{
-		for (auto s : stages)
-			delete s;
 	}
 	// is every bitsting in an e-Ball?
 	bool everythingCovered()
@@ -91,7 +87,7 @@ public:
 	bool discard = false;
 	std::vector<unsigned int>  elements;
 	unsigned int last_element;
-	std::vector<Stage*> stages;
+	std::vector<std::unique_ptr<Stage>> stages;
 };
 
 
@@ -143,7 +139,7 @@ void latexSave(std::vector<unsigned int> & result)
 	file << "\\subsubsection{distances:} \\\\\n";
 
 	file << "\\begin{tabular}{c | c| c| c| c| c| c| c| c| c| c| c| c| c| c| c| c}\n";
-	file << "\n \\hline\n c_i&";
+	file << "\n \\hline\n $c_i$&";
 	for (auto i = 0; i < result.size(); i++)
 		file << " " << c_i(i) << "&";
 	file << "\n\n";
@@ -204,4 +200,5 @@ int main()
 	for (auto e : results)
 		latexSave(e);
 
+	computer.join();
 }
